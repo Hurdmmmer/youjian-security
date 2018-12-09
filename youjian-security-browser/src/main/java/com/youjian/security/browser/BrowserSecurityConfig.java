@@ -26,7 +26,7 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /** 注入自定义的登陆成功处理器 */
     @Autowired
-    private AuthenticationSuccessHandler youjianAuthenticationHandler;
+    private AuthenticationSuccessHandler youjianAuthenticationSuccessHandler;
     /** 注入自定义验证失败处理器 */
     @Autowired
     private AuthenticationFailureHandler youjianAuthenticationFailureHandler;
@@ -53,7 +53,7 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/authentication/require") // 配置登陆页面
                 // 配置让 UsernamePasswordAuthenticationFilter 基于账号密码的方式校验
                 .loginProcessingUrl("/authentication/form")    // 配置验证拦url, 表单拦截表单提交的路径
-                .successHandler(youjianAuthenticationHandler)  // 配置登陆成功处理器
+                .successHandler(youjianAuthenticationSuccessHandler) // 配置登陆成功处理器
                 .failureHandler(youjianAuthenticationFailureHandler) // 配置验证失败处理器
                 .and()
                 .authorizeRequests()

@@ -8,6 +8,12 @@ import lombok.Data;
  */
 @Data
 public class BrowserProperties {
-    // 默认的登陆页面
+    /** 默认的登陆页面*/
     private String loginPage = "/signin.html";
+
+    /** 默认登陆类型 */
+    private LoginType loginType = LoginType.JSON;
+
+    /** 登陆成功跳转的页面 */
+    private String successPage;
 }

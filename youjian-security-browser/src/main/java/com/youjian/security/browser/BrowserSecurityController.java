@@ -4,6 +4,7 @@ import com.youjian.security.browser.support.SimpleResponse;
 import com.youjian.security.core.properties.SecurityProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
@@ -17,7 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- *  该控制器用于跳转返回 html 或 json
+ *  该控制器用于引导验证时, 跳转的 html 登陆页面
+ *  如果访问的是 json 格式, 则返回 json 格式的提示信息
  * @author shen youjian
  * @date 12/9/2018 10:34 AM
  */
@@ -43,7 +45,8 @@ public class BrowserSecurityController {
                 redirectStrategy.sendRedirect(request,response, securityProperties.getBrowser().getLoginPage());
             }
         }
-        return new SimpleResponse("访问服务需要身份验证, 清引导用户进入登陆页面");
+        response.setStatus(HttpStatus.FORBIDDEN.value());
+        return new SimpleResponse("访问服务需要身份验证, 请引导用户进入登陆页面");
     }
 
 }

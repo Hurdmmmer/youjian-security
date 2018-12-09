@@ -20,3 +20,4 @@ security:
 #  security:
 #    browser:
 #      loginPage: /demo-signIn.html
+#      loginType: REDIRECT
