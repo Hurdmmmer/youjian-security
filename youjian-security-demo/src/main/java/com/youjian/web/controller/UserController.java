@@ -2,7 +2,8 @@ package com.youjian.web.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.youjian.dto.User;
-import com.youjian.exception.UserExistException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
+    /**
+     * 获取用户的认证信息 SecurityContextHolder.getContext().getAuthentication()
+     * 只获取 userDetails 信息 使用注解 @AuthenticationPrincipal
+     */
+    @GetMapping("/me")
+    public Object getMe(@AuthenticationPrincipal UserDetails user) {
+        return user;
+    }
+
     /**
      *   JsonView 可以控制不同的返回同一对象时, 指定不同的方法,返回不同的字段
      *   1. 创建 2 个不同的接口
