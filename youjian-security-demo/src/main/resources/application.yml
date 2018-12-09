@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: durhummer
+    password: Qwsyj222!
+    url: jdbc:mysql://192.168.10.129:3306/pzx-demo?useUnicode=yes&characterEncoding=UTF-8
+  session:
+    store-type: none
+  redis:
+    host: 192.168.10.129
+    port: 6379
+
+# 关闭默认的security的安全校验
+security:
+  basic:
+    enabled: false
+
+# 自定义登陆页面
+#youjian:
+#  security:
+#    browser:
+#      loginPage: /demo-signIn.html
