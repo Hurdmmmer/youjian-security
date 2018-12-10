@@ -44,6 +44,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
             }catch (ValidateCodeException e) {
                 // 使用我们自定义的错误处理器处理这个异常
                 authenticationFailureHandler.onAuthenticationFailure(httpServletRequest, httpServletResponse, e);
+                return ;
             }
         }
         // 否则执行下面的拦截器,不进行校验

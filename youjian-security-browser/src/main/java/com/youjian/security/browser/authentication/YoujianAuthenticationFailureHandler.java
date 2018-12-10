@@ -1,5 +1,6 @@
 package com.youjian.security.browser.authentication;
 
+import com.youjian.security.browser.support.SimpleResponse;
 import com.youjian.security.core.properties.LoginType;
 import com.youjian.security.core.properties.SecurityProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,7 @@ public class YoujianAuthenticationFailureHandler extends SimpleUrlAuthentication
             // 我们提供了错误的 json 格式返回
             response.setStatus(HttpStatus.FORBIDDEN.value());
             response.setContentType("application/json;charset=UTF-8");
-            response.getWriter().write(objectMapper.writeValueAsString(exception));
+            response.getWriter().write(objectMapper.writeValueAsString(new SimpleResponse(exception.getMessage())));
         } else {
             super.onAuthenticationFailure(request,response, exception);
         }
