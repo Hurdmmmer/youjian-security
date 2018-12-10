@@ -1,6 +1,7 @@
 package com.youjian.security.browser;
 
 import com.youjian.security.core.properties.SecurityProperties;
+import com.youjian.security.core.validate.code.ValidateCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * spring security 配置
@@ -49,7 +51,12 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
          * 当使用 httpBasic 方法,表示当前使用 Basic 64 加密验证,
          * 基于表单的这
          */
-        http.formLogin()
+        ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
+        // 设置失败处理器
+        validateCodeFilter.setAuthenticationFailureHandler(youjianAuthenticationFailureHandler);
+
+        http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class) // 添加前置我们自定义的验证码过滤器, 会在 UsernamePasswordAuthenticationFilter 前面执行
+                .formLogin()
                 .loginPage("/authentication/require") // 配置登陆页面
                 // 配置让 UsernamePasswordAuthenticationFilter 基于账号密码的方式校验
                 .loginProcessingUrl("/authentication/form")    // 配置验证拦url, 表单拦截表单提交的路径
@@ -58,7 +65,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/authentication/require",
-                        securityProperties.getBrowser().getLoginPage()).permitAll()
+                        securityProperties.getBrowser().getLoginPage(),
+                        "/code/image").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
