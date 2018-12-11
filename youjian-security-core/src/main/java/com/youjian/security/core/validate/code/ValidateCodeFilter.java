@@ -1,13 +1,16 @@
 package com.youjian.security.core.validate.code;
 
+import com.youjian.security.core.properties.SecurityProperties;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -18,26 +21,55 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 实现spring提供的工具类 {@link OncePerRequestFilter}
  * 来保证一次请求该过滤器只会被执行一次, 可以用于做校验验证码
+ * 实现 {@link InitializingBean} 用来spring 初始化 bean 对象后再继续注入需要的配置
+ *
  * @author shen youjian
  * @date 12/10/2018 9:49 PM
  */
 @Slf4j
 @Data
-public class ValidateCodeFilter extends OncePerRequestFilter {
+public class ValidateCodeFilter extends OncePerRequestFilter implements InitializingBean {
 
     private AuthenticationFailureHandler authenticationFailureHandler;
 
     private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
+    // 安全配置类
+    private SecurityProperties securityProperties;
+    private Set<String> urls = new HashSet<>();
+
+
+    private AntPathMatcher pathMatcher = new AntPathMatcher();
+
+    @Override
+    public void afterPropertiesSet() throws ServletException {
+        super.afterPropertiesSet();
+        String url = securityProperties.getCode().getImage().getUrls();
+        String[] configUrls = StringUtils.split(url, ",");
+        if (configUrls != null) {
+            urls.addAll(Arrays.asList(configUrls));  // 配置文件中配置的url
+        }
+        urls.add("/authentication/form"); // 配置基本的表单路径
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-//        只有在登陆请求并且是post的方式才做验证码校验
-        if (StringUtils.equals("/authentication/form", httpServletRequest.getRequestURI()) &&
-            StringUtils.equalsAnyIgnoreCase("POST", httpServletRequest.getMethod())) {
+
+        boolean flag = false;
+        // 校验是否匹配配置文件中拦截的 url
+        for (String url : urls) {
+            if (pathMatcher.match(url, httpServletRequest.getRequestURI())) {
+                flag = true;
+                break;
+            }
+        }
+        if (flag) {
             // 校验验证码 ServletWebRequest 是 spring 提供的 request 工具类
             try{
                 validate(new ServletWebRequest(httpServletRequest));
@@ -47,12 +79,14 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
                 return ;
             }
         }
+
         // 否则执行下面的拦截器,不进行校验
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 
     /**
      * 验证验证码是否合法
+     *
      * @param request
      * @throws ValidateCodeException
      */

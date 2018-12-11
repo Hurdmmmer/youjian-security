@@ -37,7 +37,7 @@ public class UserController {
 
     @GetMapping
     @JsonView(User.UserSimpleView.class)
-    public List<User> query(@RequestParam("username") String username) {
+    public List<User> query() {
         User user = new User();
         user.setUsername("tom");
         user.setPassword("123");

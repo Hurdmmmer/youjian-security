@@ -1,17 +1,19 @@
 package com.youjian.security.core.validate.code;
 
+import lombok.Data;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
-
+@Data
 public class ValidateCode {
     private Random random = new Random();
-    private String randString = "0123456789";// 随机产生的字符串
+    private String randString = "0123456789abcdefghijklmnopqrstuvwxyz";// 随机产生的字符串
 
     private int width = 80;// 图片宽
     private int height = 20;// 图片高
     private int lineSize = 40;// 干扰线数量
-    private int stringNum = 4;// 随机产生字符数量
+    private int length = 4;// 随机产生字符数量
     private String randCode = "";
 
     /*
@@ -51,7 +53,7 @@ public class ValidateCode {
             drowLine(g);
         }
         // 绘制随机字符
-        for (int i = 1; i <= stringNum; i++) {
+        for (int i = 1; i <= length; i++) {
             randCode = drowString(g, randCode, i);
         }
         g.dispose();

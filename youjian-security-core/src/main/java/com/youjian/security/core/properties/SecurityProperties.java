@@ -12,4 +12,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "youjian.security")
 public class SecurityProperties {
     private BrowserProperties browser = new BrowserProperties();
+
+    private ValidateCodeProperties code = new ValidateCodeProperties();
 }

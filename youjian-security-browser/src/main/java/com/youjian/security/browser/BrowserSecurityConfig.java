@@ -54,6 +54,9 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
         ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
         // 设置失败处理器
         validateCodeFilter.setAuthenticationFailureHandler(youjianAuthenticationFailureHandler);
+        // 注入我们验证码拦截的url, 并执行后置属性配置
+        validateCodeFilter.setSecurityProperties(securityProperties);
+        validateCodeFilter.afterPropertiesSet();
 
         http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class) // 添加前置我们自定义的验证码过滤器, 会在 UsernamePasswordAuthenticationFilter 前面执行
                 .formLogin()

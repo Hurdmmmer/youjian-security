@@ -36,7 +36,7 @@ public class ImageCode {
         this.expireTime = expireTime;
     }
 
-    public boolean isExpired() {
+    boolean isExpired() {
         // 判断当前事件是否在生成验证码的事件之后, 如果是 则返回 true
         return LocalDateTime.now().isAfter(this.expireTime);
     }
