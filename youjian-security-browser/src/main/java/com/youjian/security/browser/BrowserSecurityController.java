@@ -1,6 +1,7 @@
 package com.youjian.security.browser;
 
 import com.youjian.security.browser.support.SimpleResponse;
+import com.youjian.security.core.properties.SecurityConstants;
 import com.youjian.security.core.properties.SecurityProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class BrowserSecurityController {
     @Autowired
     private SecurityProperties securityProperties;
 
-    @RequestMapping("/authentication/require")
+    @RequestMapping(SecurityConstants.DEFAULT_UNAUTHENTICATION_URL)
     public SimpleResponse requireAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // 获取缓存在session中的原来访问的url
         SavedRequest req = requestCache.getRequest(request, response);

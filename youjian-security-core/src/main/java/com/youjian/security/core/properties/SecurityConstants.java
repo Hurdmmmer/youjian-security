@@ -9,7 +9,6 @@ public interface SecurityConstants {
 	/**
 	 * 当请求需要身份认证时，默认跳转的url
 	 * 
-	 * @see SecurityController
 	 */
 	public static final String DEFAULT_UNAUTHENTICATION_URL = "/authentication/require";
 	/**
@@ -23,9 +22,9 @@ public interface SecurityConstants {
 	/**
 	 * 默认登录页面
 	 * 
-	 * @see SecurityController
 	 */
-	public static final String DEFAULT_LOGIN_PAGE_URL = "/imooc-signIn.html";
+	public static final String DEFAULT_LOGIN_IMAGE_PAGE_URL = "/loginImageCode.html";
+	public static final String DEFAULT_LOGIN_SMS_PAGE_URL = "/loginSmsCode.html";
 	/**
 	 * 验证图片验证码时，http请求中默认的携带图片验证码信息的参数的名称
 	 */
