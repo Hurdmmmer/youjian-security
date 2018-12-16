@@ -8,12 +8,13 @@ import lombok.Data;
  * @date 12/11/2018 7:57 PM
  */
 @Data
-public class ImageCodeProperties {
+public class ImageCodeProperties extends SmsCodeProperties{
     private int width = 80;// 图片宽
     private int height = 20;// 图片高
     private int lineSize = 40;// 干扰线数量
-    private int length = 4;// 随机产生字符数量
-    private int expiredIn = 60; // 过期时间
 
-    private String urls; // 配置拦截验证码拦截的url
+    public ImageCodeProperties() {
+        // 设置默认的长度为4
+        super(4);
+    }
 }

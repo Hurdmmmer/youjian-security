@@ -1,11 +1,12 @@
 package com.youjian.security.core.validate.annotation;
 
+import com.youjian.security.core.validate.code.ValidateCodeGenerator;
 import org.springframework.context.annotation.Conditional;
 
 import java.lang.annotation.*;
 
 /**
- * 条件装配自定义注解, 如果没有实现了验证码生成逻辑 {@link com.youjian.security.core.validate.code.ValidateCodeGenerator}
+ * 条件装配自定义注解, 如果没有实现了验证码生成逻辑 {@link ValidateCodeGenerator}
  * 则装配默认的验证码生成器
  * @author shen youjian
  * @date 12/11/2018 11:02 PM

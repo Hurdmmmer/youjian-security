@@ -1,12 +1,16 @@
-package com.youjian.security.core.validate.code;
+package com.youjian.security.core.validate.filter;
 
+import com.youjian.security.core.properties.SecurityConstants;
 import com.youjian.security.core.properties.SecurityProperties;
+import com.youjian.security.core.validate.code.ValidateCode;
+import com.youjian.security.core.validate.code.ValidateCodeProcessor;
+import com.youjian.security.core.validate.code.image.ImageCode;
+import com.youjian.security.core.validate.controller.ValidateCodeController;
+import com.youjian.security.core.validate.exception.ValidateCodeException;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
@@ -71,12 +75,12 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
         }
         if (flag) {
             // 校验验证码 ServletWebRequest 是 spring 提供的 request 工具类
-            try{
+            try {
                 validate(new ServletWebRequest(httpServletRequest));
-            }catch (ValidateCodeException e) {
+            } catch (ValidateCodeException e) {
                 // 使用我们自定义的错误处理器处理这个异常
                 authenticationFailureHandler.onAuthenticationFailure(httpServletRequest, httpServletResponse, e);
-                return ;
+                return;
             }
         }
 
@@ -92,7 +96,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
      */
     private void validate(ServletWebRequest request) throws ValidateCodeException {
         // session 取出验证码
-        ImageCode imageCode = (ImageCode) sessionStrategy.getAttribute(request, ValidateCodeController.SESSION_KEY);
+        ValidateCode imageCode = (ValidateCode) sessionStrategy.getAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "IMAGE");
         // 请求中获取验证码
         String codeInRequest = null;
         try {
@@ -107,16 +111,16 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
         if (imageCode == null) {
             throw new ValidateCodeException("验证码不存在");
         }
-        if (imageCode.isExpired()) {
+        if (imageCode.isExpried()) {
             // 过期移出该验证码
-            sessionStrategy.removeAttribute(request, ValidateCodeController.SESSION_KEY);
+            sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "IMAGE");
             throw new ValidateCodeException("验证码已过期");
         }
         if (!StringUtils.equalsAnyIgnoreCase(codeInRequest, imageCode.getCode())) {
             throw new ValidateCodeException("验证码不匹配");
         }
 
-        sessionStrategy.removeAttribute(request, ValidateCodeController.SESSION_KEY);
+        sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "IMAGE");
     }
 
 

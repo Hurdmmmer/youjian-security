@@ -19,9 +19,13 @@ youjian:
   security:
     code:
       image:
-        length: 6
-        width: 100
-        urls: /user/*
+        length: 4
+        expiredIn: 30
+#        width: 120
+#        urls: /user/*
+      sms:
+        expiredIn: 100
+        lenght: 5
 
 # 自定义登陆页面
 #youjian:
