@@ -27,7 +27,7 @@ public class ValidateCode {
     }
 
 
-    public boolean isExpried() {
+    public boolean isExpired() {
         return LocalDateTime.now().isAfter(this.expireTime);
     }
 }

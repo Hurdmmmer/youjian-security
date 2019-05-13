@@ -1,6 +1,9 @@
-package com.youjian.security.core.validate.code;
+package com.youjian.security.core.validate;
 
-import com.youjian.security.core.validate.code.image.DefaultImageCodeGenerator;
+import com.youjian.security.core.validate.code.ValidateCode;
+import com.youjian.security.core.validate.code.ValidateCodeGenerator;
+import com.youjian.security.core.validate.code.ValidateCodeProcessor;
+import com.youjian.security.core.validate.code.ValidateCodeType;
 import com.youjian.security.core.validate.exception.ValidateCodeException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,7 +107,7 @@ public abstract class AbstractValidateCodeProcessor <C extends ValidateCode> imp
             throw new ValidateCodeException(processorType + "验证码不存在");
         }
 
-        if (codeInSession.isExpried()) {
+        if (codeInSession.isExpired()) {
             sessionStrategy.removeAttribute(request, sessionKey);
             throw new ValidateCodeException(processorType + "验证码已过期");
         }

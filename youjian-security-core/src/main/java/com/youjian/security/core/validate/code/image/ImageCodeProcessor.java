@@ -1,6 +1,6 @@
 package com.youjian.security.core.validate.code.image;
 
-import com.youjian.security.core.validate.code.AbstractValidateCodeProcessor;
+import com.youjian.security.core.validate.AbstractValidateCodeProcessor;
 import com.youjian.security.core.validate.code.ValidateCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.ServletWebRequest;

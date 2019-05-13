@@ -108,7 +108,7 @@ public class SmsValidateCodeFilter extends OncePerRequestFilter implements Initi
         if (smsCode == null) {
             throw new ValidateCodeException("验证码不存在");
         }
-        if (smsCode.isExpried()) {
+        if (smsCode.isExpired()) {
             // 过期移出该验证码
             sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "SMS");
             throw new ValidateCodeException("验证码已过期");

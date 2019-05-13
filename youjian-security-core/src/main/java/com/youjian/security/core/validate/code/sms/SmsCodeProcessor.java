@@ -1,7 +1,7 @@
 package com.youjian.security.core.validate.code.sms;
 
 import com.youjian.security.core.properties.SecurityConstants;
-import com.youjian.security.core.validate.code.AbstractValidateCodeProcessor;
+import com.youjian.security.core.validate.AbstractValidateCodeProcessor;
 import com.youjian.security.core.validate.code.ValidateCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
